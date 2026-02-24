@@ -3,6 +3,27 @@
 {% block title %}Zoo Adventure{% endblock %}
 
 {% block body %}
+
+<!--Review widget that the user can hover and select what star rating they want to give and an option to write a short review-->
+<div class="review-widget">
+    <h3>Rate Your Visit</h3>
+
+    <div class="stars">
+        <span data-value="1">★</span>
+        <span data-value="2">★</span>
+        <span data-value="3">★</span>
+        <span data-value="4">★</span>
+        <span data-value="5">★</span>
+    </div>
+
+    <textarea id="review-text" placeholder="Please write us a short review..."></textarea>
+
+    <button id="submit-review">Submit</button>
+
+    <p id="review-confirm" class="hidden">Thank you for your review!</p>
+</div>
+
+<!--Shows a image of my choice to give the user a better theme for what they are there for-->
 <div class="hero">
     <div class="hero-text">
         <h1>Welcome to Zoo Adventure</h1>
@@ -11,6 +32,7 @@
     </div>
 </div>
 
+<!--displays 3 cards at the bottom of the home page which gives descriptions on what you can expect-->
 <section class="features">
     <div class="feature-card">
         <h2>🦁 Big Cats</h2>
@@ -26,3 +48,34 @@
     </div>
 </section>
 {% endblock %}
+
+<script>
+const stars = document.querySelectorAll('.stars span');
+let rating = 0;
+
+stars.forEach(star => {
+    star.addEventListener('click', () => {
+        rating = star.dataset.value;
+
+        stars.forEach(s => s.classList.remove('selected'));
+        for (let i = 0; i < rating; i++) {
+            stars[i].classList.add('selected');
+        }
+    });
+});
+
+document.getElementById('submit-review').addEventListener('click', () => {
+    const text = document.getElementById('review-text').value;
+
+    if (rating === 0 || text.trim() === "") {
+        alert("Please select a rating and write a review.");
+        return;
+    }
+
+    document.getElementById('review-confirm').classList.remove('hidden');
+
+    // Optional: send to backend later
+    console.log("Rating:", rating);
+    console.log("Review:", text);
+});
+</script>
