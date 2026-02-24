@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% block head %}
+    <title>{% block title %}{% endblock %} - My application</title>
+    {% endblock %}
+</head>
+<body>
+    <div class="topnav" id="mytopnav">
+        <a href="/" class="active">Home</a>
+        <a href="about">About us</a>
+        <a href="signup">Sign up</a>
+        <a href="log">Login</a>
+        <a href="hotelbooking">Hotel booking</a>
+        <a href="zoobooking">Zoo booking</a>
+        <a href="javascript:void(0);" class="icon" onclick="myfunction()">
+            <i class="fa fa-bars"></i>
+        </a>
+    </div>
+{% block body %}
+
+{% endblock %}
+</body>                                                                                     
+</html>
