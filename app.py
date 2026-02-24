@@ -2,6 +2,14 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
+
+@app.post("/log")
+def log_post():
+    email = request.form["email"]
+    password = request.form["password"]
+
+user = User.query.filter_by(email=email)
+
 @app.route ('/')
 def index():
     return render_template('index.html')
