@@ -2,15 +2,68 @@
 
 {% block title %}zoobooking{% endblock %}
 
-{% block head %}
+{% block body %}
 
-    {{ super() }}
+<h1>zoo booking !</h1>
 
-    <style>
+<div class="form-container">
 
-    </style>
+    <!-- show confirmation if booking was made -->
+    {% if booking_ref %}
+        <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3>✅ Booking confirmed!</h3>
+            <p>Date: {{ visit_date }} | Adults: {{ adults }} | Children: {{ children }}</p>
+            <p>Total: £{{ "%.2f"|format(total) }}</p>
+            <p>Booking reference: <strong>{{ booking_ref }}</strong></p>
+        </div>
+    {% endif %}
+
+    <h2>Book your tickets</h2>
+
+    <form method="POST" action="/zoobooking">
+        <label>Visit Date</label>
+        <input type="date" name="date" required>
+
+        <label>Number of Adults (£18 each)</label>
+        <input type="number" name="adults" id="adults" value="1" min="1">
+
+        <label>Number of Children (£10 each)</label>
+        <input type="number" name="children" id="children" value="0" min="0">
+
+        <!-- added extra options -->
+        <label>Add-on</label>
+        <select name="addon" id="addon">
+            <option value="none">None</option>
+            <option value="safari">Safari Tour (+£8 per person)</option>
+            <option value="penguins">Penguin Feeding (+£12 per person)</option>
+        </select>
+
+        <label>Any special requirements?</label>
+        <textarea name="notes" placeholder="e.g wheelchair access, allergies etc"></textarea>
+
+        <p><strong>Total: £<span id="total">18.00</span></strong></p>
+
+        <button type="submit" class="btn">Book now</button>
+    </form>
+</div>
+
 {% endblock %}
 
-{% block body %}
-<h1>zoo booking !</h1>
+{% block scripts %}
+<script>
+    const addonPrices = { none: 0, safari: 8, penguins: 12 };
+
+    document.getElementById('adults').addEventListener('input', updateTotal);
+    document.getElementById('children').addEventListener('input', updateTotal);
+    document.getElementById('addon').addEventListener('change', updateTotal);
+
+    function updateTotal() {
+        var adults = parseInt(document.getElementById('adults').value) || 0;
+        var children = parseInt(document.getElementById('children').value) || 0;
+        var addon = document.getElementById('addon').value;
+        var addonCost = addonPrices[addon] * (adults + children);
+        var total = (adults * 18) + (children * 10) + addonCost;
+        document.getElementById('total').textContent = total.toFixed(2);
+    }
+</script>
 {% endblock %}

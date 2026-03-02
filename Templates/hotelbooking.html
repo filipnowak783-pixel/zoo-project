@@ -1,16 +1,149 @@
 {% extends "base.html" %}
 
-{% block title %}hotelbooking{% endblock %}
-
-{% block head %}
-
-    {{ super() }}
-
-    <style>
-
-    </style>
-{% endblock %}
+{% block title %}Hotel booking{% endblock %}
 
 {% block body %}
-<h1>Hotel booking !</h1>
+
+<h1>Hotel booking!</h1>
+
+<div style="max-width: 700px; margin: 20px auto; padding: 0 20px;">
+
+ <!-- show confirmation if booking was made -->
+    {% if booking_ref %}
+        <div style="background: #d4edda; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h3>🏨 Hotel booked!</h3>
+            <p>{{ hotel_name }} | {{ checkin }} to {{ checkout }} ({{ nights }} nights)</p>
+            <p>Total: £{{ "%.2f"|format(total) }}</p>
+            <p>Reference: <strong>{{ booking_ref }}</strong></p>
+        </div>
+    {% endif %}
+
+
+    <!-- hotel options -->
+    <h2>Available Hotels</h2>
+
+    <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px;">
+
+        <div style="border: 2px solid #ccc; border-radius: 8px; padding: 15px; width: 200px; cursor: pointer;" id="hotel1" onclick="selectHotel('Safari Lodge', 159, 'hotel1')">
+            <h3>Safari Lodge</h3>
+            <p>⭐⭐⭐⭐</p>
+            <p>£159 per night</p>
+            <p style="font-size: 13px; color: gray;">Free breakfast included</p>
+        </div>
+
+        <div style="border: 2px solid #ccc; border-radius: 8px; padding: 15px; width: 200px; cursor: pointer;" id="hotel2" onclick="selectHotel('Jungle Retreat', 119, 'hotel2')">
+            <h3>Jungle Retreat</h3>
+            <p>⭐⭐⭐⭐</p>
+            <p>£119 per night</p>
+            <p style="font-size: 13px; color: gray;">Pool included</p>
+        </div>
+
+        <div style="border: 2px solid #ccc; border-radius: 8px; padding: 15px; width: 200px; cursor: pointer;" id="hotel3" onclick="selectHotel('Elephant Suite', 229, 'hotel3')">
+            <h3>Elephant Suite</h3>
+            <p>⭐⭐⭐⭐⭐</p>
+            <p>£229 per night</p>
+            <p style="font-size: 13px; color: gray;">Luxury, spa & dining</p>
+        </div>
+
+    </div>
+
+ <!-- booking for the hotel(details) -->
+    <div class="form-container" style="margin: 0;">
+        <h2>Book your stay</h2>
+
+        <p id="selected-hotel-text" style="color: green; font-weight: bold; margin-bottom: 10px;"></p>
+
+        <form method="POST" action="/hotelbooking">
+            <!-- hidden inputs to send hotel name and price to flask -->
+            <input type="hidden" name="hotel_name" id="hotel_name_input" value="">
+            <input type="hidden" name="hotel_price" id="hotel_price_input" value="">
+
+            <label>Check in date</label>
+            <input type="date" name="checkin" id="checkin" required>
+
+            <label>Check out date</label>
+            <input type="date" name="checkout" id="checkout" required>
+
+            <label>Number of guests</label>
+            <input type="number" name="guests" value="2" min="1" max="10">
+
+            <label>Room type</label>
+            <select name="roomtype">
+                <option>Standard</option>
+                <option>Deluxe</option>
+                <option>Family Suite</option>
+            </select>
+
+            <label>Your name</label>
+            <input type="text" name="guestname" placeholder="Full name" required>
+
+            <label>Email</label>
+            <input type="email" name="guestemail" placeholder="your@email.com" required>
+
+            <p><strong>Total: £<span id="hotel-total">0.00</span></strong></p>
+
+            <button type="submit" class="btn" onclick="return validateHotel()">Book hotel</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    var selectedHotel = "";
+    var selectedPrice = 0;
+
+    function selectHotel(name, price, hotelId) {
+        // remove highlight from all
+        document.getElementById('hotel1').style.borderColor = '#ccc';
+        document.getElementById('hotel2').style.borderColor = '#ccc';
+        document.getElementById('hotel3').style.borderColor = '#ccc';
+
+        // highlight selected
+        document.getElementById(hotelId).style.borderColor = '#2EC261';
+
+        selectedHotel = name;
+        selectedPrice = price;
+        document.getElementById('selected-hotel-text').textContent = "Selected: " + name;
+        updateHotelTotal();
+    }
+
+    document.getElementById('checkin').addEventListener('change', updateHotelTotal);
+    document.getElementById('checkout').addEventListener('change', updateHotelTotal);
+
+    function updateHotelTotal() {
+        if (selectedPrice == 0) return;
+        var checkin = new Date(document.getElementById('checkin').value);
+        var checkout = new Date(document.getElementById('checkout').value);
+        var nights = (checkout - checkin) / (1000 * 60 * 60 * 24);
+        if (nights > 0) {
+            document.getElementById('hotel-total').textContent = (nights * selectedPrice).toFixed(2);
+        }
+    }
+
+    function bookHotel() {
+        if (selectedHotel == "") {
+            alert("Please select a hotel first!");
+            return;
+        }
+        var checkin = document.getElementById('checkin').value;
+        var checkout = document.getElementById('checkout').value;
+        var name = document.getElementById('guestname').value;
+        var email = document.getElementById('guestemail').value;
+
+        if (checkin == "" || checkout == "" || name == "" || email == "") {
+            alert("Please fill in all the fields");
+            return;
+        }
+
+        var total = document.getElementById('hotel-total').textContent;
+        var ref = "HTL" + Math.floor(Math.random() * 100000);
+
+        document.getElementById('hotel-booking-details').textContent = selectedHotel + " | " + checkin + " to " + checkout + " | £" + total;
+        document.getElementById('hotel-ref').textContent = ref;
+        document.getElementById('hotel-confirmation').style.display = 'block';
+    }
+</script>
 {% endblock %}

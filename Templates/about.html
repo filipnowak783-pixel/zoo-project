@@ -1,16 +1,34 @@
 {% extends "base.html" %}
 
-{% block title %}about{% endblock %}
+{% block title %}About us{% endblock %}
 
-{% block head %}
-
-    {{ super() }}
-
-    <style>
-
-    </style>
-{% endblock %}
 
 {% block body %}
+
 <h1>About us!</h1>
+
+<div style="max-width: 700px; margin: 0 auto; padding: 20px;">
+    <p>Zoo Adventure is a zoo that has lots of cool animals. We have been open since 1999 and have over 500 species of animals.</p>
+
+    <br>
+
+    <p>Our mission is to protect animals and teach people about wildlife. We work with scientists and do research to help endangered species.</p>
+
+    <br>
+
+    <h3>Opening Hours</h3>
+    <p>Monday - Friday: 9am to 5pm</p>
+    <p>Saturday - Sunday: 8am to 6pm</p>
+
+    <br>
+
+    <h3>Contact us</h3>
+    <p>Email: info@zooadventure.com</p>
+    <p>Phone: 01234 567890</p>
+
+    <br>
+
+    <a href="/zoobooking" class="btn">Book tickets</a>
+</div>
+
 {% endblock %}
