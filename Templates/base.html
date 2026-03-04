@@ -8,8 +8,6 @@
 </head>
 <body>
 
-{% block body %}
-
 <!-- nav bar -->
 <div class="topnav">
     <a href="/" {% if request.endpoint == 'home' %}class="active"{% endif %}>Home</a>
@@ -36,6 +34,7 @@
     <p id="review-confirm">Thank you for your review!</p>
 </div>
 
+{% block body %}
 {% endblock %}
 
 <footer>
