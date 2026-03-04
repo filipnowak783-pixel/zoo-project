@@ -15,6 +15,7 @@ init_db()
 def home():
     return render_template('home.html')
 
+# about us page
 @app.route('/about')
 def about():
     return render_template('about.html')

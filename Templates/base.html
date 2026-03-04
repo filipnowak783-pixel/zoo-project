@@ -8,17 +8,18 @@
 </head>
 <body>
 
+{% block body %}
+
+<!-- nav bar -->
 <div class="topnav">
-    <a href="/" {% if request.endpoint = 'home' %}class="active"{% endif %}>Home</a>
-    <a href="/about" {% if request.endpoint = 'about' %}class="active"{% endif %}>About us</a>
-    <a href="/signup" {% if request.endpoint = 'signup' %}class="active"{% endif %}>Sign up</a>
-    <a href="/login" {% if request.endpoint = 'login' %}class="active"{% endif %}>Login</a>
-    <a href="/hotelbooking" {% if request.endpoint = 'hotelbooking' %}class="active"{% endif %}>Hotel booking</a>
-    <a href="/zoobooking" {% if request.endpoint = 'zoobooking' %}class="active"{% endif %}>Zoo booking</a>
+    <a href="/" {% if request.endpoint == 'home' %}class="active"{% endif %}>Home</a>
+    <a href="/about" {% if request.endpoint == 'about' %}class="active"{% endif %}>About us</a>
+    <a href="/signup" {% if request.endpoint == 'signup' %}class="active"{% endif %}>Sign up</a>
+    <a href="/login" {% if request.endpoint == 'login' %}class="active"{% endif %}>Login</a>
+    <a href="/hotelbooking" {% if request.endpoint =='hotelbooking' %}class="active"{% endif %}>Hotel booking</a>
+    <a href="/zoobooking" {% if request.endpoint == 'zoobooking' %}class="active"{% endif %}>Zoo booking</a>
 </div>
 
-{% block body %}
-{% endblock %}
 
 <!-- review widget -->
 <div class="review-widget">
@@ -35,10 +36,13 @@
     <p id="review-confirm">Thank you for your review!</p>
 </div>
 
+{% endblock %}
+
 <footer>
-    <p>Zoo Adventure &copy; 2025</p>
+    <p>Zoo Adventure &copy; 2026</p>
 </footer>
 
+{% block scripts %}
 <script>
     // star rating thing
     const stars = document.querySelectorAll('.stars span');
@@ -66,7 +70,7 @@
     });
 </script>
 
-{% block scripts %}{% endblock %}
+{% endblock %}
 
 </body>
 </html>
